@@ -1,89 +1,100 @@
-# Online Shopping Prediction
+# 🛒 Online Shopper Intention Prediction
 
-This project aims to predict whether an online shopping session results in a purchase using the Online Shoppers Purchasing Intention Dataset. We experiment with several machine learning models and address class imbalance using SMOTE and class weighting. The project provides insights into user behavior that may help improve e-commerce conversion rates.
+This project investigates the prediction of online shopping purchase intention using session-level behavioral features from an e-commerce dataset. We evaluate five machine learning models—including Logistic Regression, SVM, Random Forest, XGBoost, and Deep Neural Network—under a unified pipeline with class imbalance handling and performance visualization.
 
-Project Overview:
-- Task: Binary classification (Revenue = True / False)
-- Dataset: 12,330 browsing sessions
-- Features: 17 attributes (e.g., bounce rates, exit rates, visitor type, weekend, etc.)
-- Goal: Identify key factors that influence purchase decisions
+## 📂 Project Structure
 
-Challenges Addressed:
-- Class Imbalance: Only ~15.5% of samples are positive (Revenue=True)
-- Mixed Features: Numerical and categorical variables
-- Robust Evaluation: Focus on F1, Precision, Recall, and ROC-AUC instead of accuracy
-
-Models Evaluated:
-- Logistic Regression (Baseline)
-- Support Vector Machine (SVM)
-- Random Forest
-- XGBoost
-- Deep Neural Networks (DNN)
-
-Evaluation Metrics:
-- F1-Score
-- Precision / Recall
-- ROC-AUC Score
-- Confusion Matrix
-
-Project Structure:
-online-shopping-prediction/
-│
-├── data/
-│   └── online_shoppers_intention.csv
-│
-├── notebooks/
+```
+Project/
+├── data/                      # Original & preprocessed datasets
+│   ├── online_shoppers_intention.csv
+│   ├── preprocessed_data.csv
+├── models/                    # Saved model files (.pkl / .h5)
+├── notebooks/                 # Development notebooks
 │   ├── 01_preprocessing.ipynb
 │   ├── 02_baseline_models.ipynb
-│   ├── 03_tree_models.ipynb
+│   ├── 03_smote_ensemble_models.ipynb
 │   ├── 04_dnn_model.ipynb
-│   ├── 05_smote_weighting.ipynb
-│   └── 06_final_evaluation.ipynb
-│
-├── src/
-│   ├── train_models.py
-│   ├── evaluation.py
-│   └── utils.py
-│
-├── models/
-├── results/
-├── requirements.txt
+│   └── 05_evaluation.ipynb
+├── results/                   # Output charts and evaluation CSVs
+│   ├── *.png, evaluation_summary.csv
+├── src/                       # Reproducible pipeline scripts
+│   ├── preprocess.py
+│   ├── train.py
+│   └── evaluate.py
+├── requirements.txt           # Python dependencies
 └── README.md
+```
 
-How to Run:
-1. Clone the repo and set up environment:
+## ⚙️ Setup Instructions
 
-    git clone git@github.com:YanZ23/online-shopping-prediction.git
-    cd online-shopping-prediction
+### 1. Clone the repo
 
-    python3 -m venv venv
-    source venv/bin/activate      # On Windows: venv\Scripts\activate
+```bash
+git clone https://github.com/your-username/online-shopper-intent-prediction.git
+cd online-shopper-intent-prediction
+```
 
-    pip install -r requirements.txt
+### 2. Set up the environment
 
-2. Launch Jupyter Notebook and run notebooks in order:
+You can use `venv` or `conda`. Below is `venv`:
 
-    jupyter notebook
+```bash
+python3 -m venv venv
+source venv/bin/activate   # On Windows: venv\Scripts\activate
+pip install -r requirements.txt
+```
 
-Dependencies:
-Listed in requirements.txt. Main packages include:
-- pandas
-- scikit-learn
-- imbalanced-learn
-- xgboost
-- matplotlib
-- seaborn
-- jupyter
+### 3. Reproduce the pipeline
 
-Dataset Source:
-UCI Machine Learning Repository  
-https://archive.ics.uci.edu/dataset/468/online+shoppers+purchasing+intention+dataset
+#### Preprocess the data
+```bash
+python src/preprocess.py \
+  --input data/online_shoppers_intention.csv \
+  --output data/preprocessed_data.csv
+```
 
+#### Train all models
+```bash
+python src/train.py --models all
+```
 
-Author:
-Yanrun Zhu
-zhu.yanr@northeastern.edu  
-GitHub: https://github.com/YanZ23
+#### Evaluate and visualize results
+```bash
+python src/evaluate.py --models all
+```
 
-License:
-This project is intended for educational and academic use only.
+All models and figures will be saved in `models/` and `results/`.
+
+## 📊 Models Included
+
+| Model              | Notes                                |
+|-------------------|---------------------------------------|
+| Logistic Regression | Baseline with class weighting        |
+| SVM               | Linear + RBF kernels, class weighting |
+| Random Forest     | SMOTE + tuned ensemble                |
+| XGBoost           | SMOTE + log-loss + regularization     |
+| Deep Neural Net   | Dropout, early stopping, architecture search |
+
+## 📈 Output Samples
+
+- `results/evaluation_summary.csv`: Summary of F1, precision, recall, AUC
+- `results/*.png`: Confusion matrices, ROC curves, metric barplots, gap analysis
+
+## 🧠 Highlights
+
+- Imbalance addressed with both `class_weight` and SMOTE
+- Models compared on generalization gap (train vs. test)
+- DNN performance benchmarked across 5 architectures
+- XGBoost achieved the best overall results (AUC = 0.926)
+
+## 🚀 Future Extensions
+
+- Apply LSTM for sequential clickstream modeling
+- Integrate contextual features and user personalization
+- Use real-time prediction for marketing automation & recommendation
+
+## 📄 License
+
+MIT License
+
